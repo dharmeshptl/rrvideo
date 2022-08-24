@@ -51,6 +51,7 @@ function getHtml(
 
 type RRvideoConfig = {
   fps: number;
+  puppeteer_args:string[];
   headless: boolean;
   input: string;
   cb: (file: string, error: null | Error) => void;
@@ -61,6 +62,7 @@ type RRvideoConfig = {
 const defaultConfig: RRvideoConfig = {
   fps: 15,
   headless: true,
+  puppeteer_args:[],
   input: "",
   cb: () => {},
   output: "rrvideo-output.mp4",
@@ -77,6 +79,7 @@ class RRvideo {
     this.config = {
       fps: config?.fps || defaultConfig.fps,
       headless: config?.headless || defaultConfig.headless,
+      puppeteer_args:config?.puppeteer_args || defaultConfig.puppeteer_args,
       input: config?.input || defaultConfig.input,
       cb: config?.cb || defaultConfig.cb,
       output: config?.output || defaultConfig.output,
@@ -88,7 +91,7 @@ class RRvideo {
     try {
       this.browser = await puppeteer.launch({
         headless: this.config.headless,
-        args:['--no-sandbox']
+        args:this.config.puppeteer_args
       });
       this.page = await this.browser.newPage();
       await this.page.goto("about:blank");
