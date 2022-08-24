@@ -88,6 +88,7 @@ class RRvideo {
     try {
       this.browser = await puppeteer.launch({
         headless: this.config.headless,
+        args:['--no-sandbox']
       });
       this.page = await this.browser.newPage();
       await this.page.goto("about:blank");
